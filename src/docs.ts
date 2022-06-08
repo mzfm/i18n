@@ -1,4 +1,4 @@
-import { PluginDocs } from "@mzfm/common"
+import { docs, docsEnabled, PluginDocs } from "@mzfm/common"
 import { DOCS as ExportAllText } from "./commands/ExportAllText"
 import { PLUGIN } from "./plugin"
 import packageConfig from "../package.json"
@@ -22,11 +22,7 @@ export default {
   description,
   url: "https://github.com/mzfm/i18n",
   params: {
-    i18nTag: {
-      text: "I18n tag",
-      description: "The tag to use for i18n. Use ~key~ to be replaced with the key.",
-      default: "#{~key~}",
-    },
+    i18nTag: docs("I18n tag", "The tag to use for i18n. Use ~key~ to be replaced with the key.", "#{~key~}"),
     availableLanguages: {
       text: "Available languages",
       description: "The languages that are available for the plugin.",
@@ -34,31 +30,20 @@ export default {
         {
           key: "LanguageSet",
           fields: {
-            code: {
-              text: "Language code",
-              description: "The code of the language, e.g., en-US, zh-Hans.",
-            },
-            name: {
-              text: "Language name",
-              description: "The name of the language, e.g., English, 简体中文.",
-            },
-            fontFamily: {
-              text: "Font family",
-              description: "The font family of the language.",
-            },
+            code: docs("Language code", "The code of the language, e.g., en-US, zh-Hans."),
+            name: docs("Language name", "The name of the language, e.g., English, 简体中文."),
+            fontFamily: docs("Font family", "The font family of the language."),
           },
         },
       ],
     },
-    fallbackLanguage: {
-      text: "Fallback language",
-      description: "The code of the fallback language to use when key is not found in current language.",
-    },
-    gameTitle: {
-      text: "Game title",
-      description: "The i18n key to use for the game title.",
-      default: "#{$system.title}",
-    },
+    fallbackLanguage: docs(
+      "Fallback language",
+      "The code of the fallback language to use when key is not found in current language."
+    ),
+    gameTitle: docs("Game title", "The i18n key to use for the game title.", "#{$system.title}"),
+    optionMenuEnabled: docsEnabled("Shown in option menu"),
+    optionMenuLabel: docs("Label in option menu", "The label of the option.", "#{$system.language}"),
   },
   commands: {
     ExportAllText,

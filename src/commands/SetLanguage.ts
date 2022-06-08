@@ -1,21 +1,15 @@
-import { MZFMCommand, PluginCommandDocs } from "@mzfm/common"
+import { MZFMCommand, PluginCommandDocs, setGlobal } from "@mzfm/common"
 import { PLUGIN } from "../plugin"
 
 export interface SetLanguageArgs {
   languageCode: string
 }
 
-const setLanguage = (languageCode: string) => {
-  if (languageCode in PLUGIN.languages) {
-    PLUGIN.currentLanguage = languageCode
-  }
-}
-
 export const SetLanguage: MZFMCommand<SetLanguageArgs> = {
   initialize: () => {
-    MZFM.setLanguage = setLanguage
+    MZFM.setLanguage = PLUGIN.setLanguage.bind(PLUGIN)
   },
-  run: ({ languageCode }) => setLanguage(languageCode),
+  run: ({ languageCode }) => PLUGIN.setLanguage(languageCode),
 }
 
 export const DOCS: PluginCommandDocs<typeof SetLanguage> = {
