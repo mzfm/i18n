@@ -1,0 +1,30 @@
+{
+  "name": "i-18n",
+  "version": "0.1.0",
+  "description": "Simple internationalization (i18n) for RPG Maker MZ.",
+  "author": "Vilja <i@vilja.me>",
+  "main": "dist/MZFM_I18n.js",
+  "scripts": {
+    "build": "build-plugin",
+    "dev": "build-plugin --watch",
+    "lint": "eslint --ext .js,.ts ./",
+    "prettier": "prettier --write ./src"
+  },
+  "keywords": [
+    "RPG Maker MZ"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.6.2",
+    "rmmz": "github:niokasgami/rpg-maker-mz-typescript",
+    "typescript": "^4.7.2"
+  },
+  "dependencies": {
+    "@mzfm/common": "github:mzfm/common"
+  },
+  "license": "MIT",
+  "private": true
+}
