@@ -1,6 +1,8 @@
-import { MZFMCommand, MZFM_Utils, PluginCommandDocs, mkpath, fsModule, pathModule } from "@mzfm/common"
-import { LOCALES_FOLDER } from "../plugin"
+import { MZFMCommand, isLocalTest, PluginCommandDocs, mkpath, fs, path } from "@mzfm/common"
+import { LOCALES_FOLDER, PLUGIN } from "../plugin"
 import { I18nData } from "../types"
+
+const makeKey = (...keys: string[]) => PLUGIN.params.i18nTag.replace("~key~", keys.join("."))
 
 const exportList = (
   data: I18nData,
@@ -13,8 +15,8 @@ const exportList = (
   let t = 0
   const setI18n = (value: string) => {
     const key = `${eventKey}t${(t++).toString().padStart(3, "0")}`
-    data[mapKey][key] = value
-    return `#{${mapKey}.${key}}`
+    ;(data[mapKey] as I18nData)[key] = value
+    return makeKey(mapKey, key)
   }
   for (const command of list) {
     switch (command.code) {
@@ -57,17 +59,7 @@ const exportEvent = (
   }
 }
 
-const exportFile = (
-  data: I18nData,
-  dataFolder: string,
-  localesDataFolder: string,
-  filename: string,
-  utils: {
-    fs: typeof import("fs")
-    path: typeof import("path")
-  }
-) => {
-  const { fs, path } = utils
+const exportFile = (data: I18nData, dataFolder: string, localesDataFolder: string, filename: string) => {
   const file = path.join(dataFolder, `${filename}.json`)
   console.log(`Exporting ${filename}...`)
   if (filename === "Stamp") {
@@ -78,8 +70,8 @@ const exportFile = (
   if (filename !== "MapInfos" && filename.startsWith("Map")) {
     const mapKey = filename.toLowerCase()
     data[mapKey] = {}
-    data["$map"][mapKey] = fileData["displayName"]
-    fileData["displayName"] = `#{$map.${mapKey}}`
+    ;(data["$map"] as I18nData)[mapKey] = fileData["displayName"]
+    fileData["displayName"] = makeKey("$map", mapKey)
     if (!fileData["events"]) return
     for (const event of fileData["events"]) {
       exportEvent(data, mapKey, event)
@@ -92,10 +84,10 @@ const exportFile = (
     for (const item of fileData) {
       if (!item) continue
       const { id, name, description } = item
-      data["$item"][`n${id}`] = name
-      data["$item"][`d${id}`] = description
-      item.name = `#{$item.n${id}}`
-      item.description = `#{$item.d${id}}`
+      ;(data["$item"] as I18nData)[`n${id}`] = name
+      ;(data["$item"] as I18nData)[`d${id}`] = description
+      item.name = makeKey("$item", `n${id}`)
+      item.description = makeKey("$item", `d${id}`)
     }
   } else {
     console.log("Skipped")
@@ -106,12 +98,10 @@ const exportFile = (
 
 export const ExportAllText: MZFMCommand = {
   run: async () => {
-    if (!MZFM_Utils.isLocalTest()) {
+    if (!isLocalTest()) {
       alert("This command is only available in local test run.")
       return
     }
-    const fs = fsModule()
-    const path = pathModule()
     const localesFolder = path.resolve(LOCALES_FOLDER)
     const localesDataFolder = path.resolve(localesFolder, "data")
     fs.rmdirSync(localesDataFolder, { recursive: true })
@@ -127,10 +117,10 @@ export const ExportAllText: MZFMCommand = {
     for (const file of files) {
       if (!file.endsWith(".json")) continue
       const filename = file.slice(0, -5)
-      exportFile(data, dataFolder, localesDataFolder, filename, { fs, path })
+      exportFile(data, dataFolder, localesDataFolder, filename)
     }
     alert(`Exporting all text to ${localesFolder}`)
-    const language = prompt("Language code?", "en")
+    const language = prompt("Language code?", "en-US")
     fs.writeFileSync(path.join(localesFolder, `${language}.json`), JSON.stringify(data, undefined, 2))
     alert(
       `Export complete! Please move the new data files from ${path.join(
@@ -142,6 +132,6 @@ export const ExportAllText: MZFMCommand = {
 }
 
 export const DOCS: PluginCommandDocs = {
-  description: "Export all text to locale files",
+  description: "Export all text to locale files.",
   args: {},
 }

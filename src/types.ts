@@ -5,10 +5,5 @@ export interface LanguageSet {
 }
 
 export interface I18nData {
-  [key1: string]: {
-    [key2: string]: string
-  }
-}
-export interface I18nDataAll {
-  [languageCode: string]: I18nData
+  [key: string]: string | I18nData
 }
