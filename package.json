@@ -1,5 +1,5 @@
 {
-  "name": "i-18n",
+  "name": "@mzfm/i18n",
   "version": "0.1.0",
   "description": "Simple internationalization (i18n) for RPG Maker MZ.",
   "author": "Vilja <i@vilja.me>",
@@ -23,7 +23,8 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
-    "@mzfm/common": "github:mzfm/common"
+    "@mzfm/common": "github:mzfm/common",
+    "@types/node": "^17.0.40"
   },
   "license": "MIT",
   "private": true

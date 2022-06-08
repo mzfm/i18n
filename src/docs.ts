@@ -1,5 +1,5 @@
 import { PluginDocs } from "@mzfm/common"
-import { DOCS as SetLanguage } from "./commands/SetLanguage"
+import { DOCS as ExportAllText } from "./commands/ExportAllText"
 import { PLUGIN } from "./plugin"
 import packageConfig from "../package.json"
 
@@ -23,7 +23,7 @@ export default {
   url: "https://github.com/mzfm/i18n",
   params: {},
   commands: {
-    SetLanguage,
+    ExportAllText,
   },
   helpText,
   copyright,
