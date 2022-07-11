@@ -1,14 +1,5 @@
-import { Bitmap, Scene_Boot, Window_Base, Window_Options } from "rmmz"
-import {
-  Window_Options_,
-  getGlobal,
-  isRM,
-  MZFMPlugin,
-  overrideMethod,
-  readFile,
-  uuid,
-  setGlobal,
-} from "@mzfm/common"
+import { Bitmap, Scene_Boot, Window_Base, Window_Options, OptionSymbol } from "rmmz"
+import { getGlobal, isRM, MZFMPlugin, overrideMethod, readFile, uuid, setGlobal } from "@mzfm/common"
 import { ExportAllText } from "./commands/ExportAllText"
 import { I18nData, LanguageSet } from "./types"
 
@@ -26,6 +17,8 @@ const COMMANDS = {
 }
 
 export const LOCALES_FOLDER = "./locales"
+
+type MZFMOptionSymbol = OptionSymbol | "mzfm_language"
 
 async function initialize(this: I18nPlugin) {
   if (!isRM()) return
@@ -135,21 +128,21 @@ class I18nPlugin extends MZFMPlugin<I18nParams, typeof COMMANDS> {
       this.setLanguage(keys[currentIndex])
     }
 
-    overrideMethod(Window_Options_, "makeCommandList", function (this, f) {
+    overrideMethod(Window_Options, "makeCommandList", function (this, f) {
       f()
       this.addCommand(optionMenuLabel, "mzfm_language")
     })
-    overrideMethod(Window_Options_, "statusText", function (this, f, i) {
+    overrideMethod(Window_Options, "statusText", function (this, f, i) {
       const symbol = this.commandSymbol(i)
       return symbol === "mzfm_language" ? languages[keys[currentIndex]].name : f(i)
     })
-    overrideMethod(Window_Options_, "getConfigValue", (f, symbol) => {
+    overrideMethod(Window_Options, "getConfigValue", (f, symbol: MZFMOptionSymbol) => {
       if (symbol === "mzfm_language") {
         return keys.indexOf(this.currentLanguage)
       }
       return f(symbol)
     })
-    overrideMethod(Window_Options_, "setConfigValue", function (this, f, symbol, volume) {
+    overrideMethod(Window_Options, "setConfigValue", function (this, f, symbol: MZFMOptionSymbol, volume) {
       if (symbol === "mzfm_language") {
         setIndex(volume ? 1 : -1)
         this.refresh()

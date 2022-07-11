@@ -1,4 +1,4 @@
-import { MZFMCommand, isLocalTest, PluginCommandDocs, mkpath, fs, path } from "@mzfm/common"
+import { MZFMCommand, isLocalTest, mkpath, fs, path } from "@mzfm/common"
 import { LOCALES_FOLDER, PLUGIN } from "../plugin"
 import { I18nData } from "../types"
 
@@ -129,9 +129,4 @@ export const ExportAllText: MZFMCommand = {
       )} to ${dataFolder}`
     )
   },
-}
-
-export const DOCS: PluginCommandDocs = {
-  description: "Export all text to locale files.",
-  args: {},
 }

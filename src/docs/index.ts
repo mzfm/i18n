@@ -1,7 +1,8 @@
-import { docs, docsEnabled, PluginDocs } from "@mzfm/common"
+import { docs, docsEnabled, PluginDocs } from "@mzfm/common/dist/docs"
 import { DOCS as ExportAllText } from "./commands/ExportAllText"
-import { PLUGIN } from "./plugin"
-import packageConfig from "../package.json"
+import { DOCS as SetLanguage } from "./commands/SetLanguage"
+import { PLUGIN } from "../plugin"
+import packageConfig from "../../package.json"
 
 const { name: projectName, author, description, version } = packageConfig
 
@@ -47,6 +48,7 @@ export default {
   },
   commands: {
     ExportAllText,
+    SetLanguage,
   },
   helpText,
   copyright,
